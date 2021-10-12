@@ -62,3 +62,7 @@
 .button-shadow {
   box-shadow: $button-shadow;
 }
+
+.v-data-table > .v-data-table__wrapper tbody tr.v-data-table__expanded__content {
+  box-shadow: inset 0 0 0 0 white, inset 0 0 0 0 white!important;
+}

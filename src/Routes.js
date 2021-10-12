@@ -13,6 +13,7 @@ import Charts from '@/pages/Charts/Charts'
 import Maps from '@/pages/Maps/Google'
 import Error from "@/pages/Error/Error";
 import Login from "@/pages/Login/Login";
+import InfoManager from "@/pages/Info/InfoManager";
 
 Vue.use(Router);
 
@@ -33,6 +34,11 @@ export default new Router({
         path: 'dashboard',
         name: 'Dashboard',
         component: Dashboard,
+      },
+      {
+        path: 'info-manager',
+        name: 'InfoManager',
+        component: InfoManager
       },
       {
         path: 'typography',

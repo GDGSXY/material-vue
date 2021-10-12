@@ -57,7 +57,7 @@
               :to="child.link"
               link>
                 <v-list-item-action v-if="child.icon">
-                  <v-icon size="">{{ child.icon }}</v-icon>
+                  <v-icon dense>{{ child.icon }}</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                   <v-list-item-title class="grey--text">
@@ -74,8 +74,7 @@
           :to="item.link === '#' ? null : item.link"
           link>
           <v-list-item-action>
-            <v-icon
-              size="28"
+            <v-icon dense
               :color="item.color ? item.color : ''"
             >{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -103,20 +102,10 @@ import {mapActions, mapState} from 'vuex'
       return {
         items: [
           { title: 'Dashboard', icon: 'mdi-home', link: '/dashboard' },
+          { title: '学生信息', icon: 'mdi-help-circle-outline', link: '/info-manager' },
           { title: 'Typography', icon: 'mdi-format-size', link: '/typography' },
           { title: 'Tables', icon: 'mdi-grid-large', link: '/tables' },
           { title: 'Notifications', icon: 'mdi-bell-outline', link: '/notifications' },
-          {
-            title: 'UI Elements',
-            icon: 'mdi-image-filter-none',
-            link: '/icons',
-            model: false,
-            children: [
-              { title: 'Icons', icon: 'mdi-circle-small', link: '/icons'},
-              { title: 'Charts', icon: 'mdi-circle-small', link: '/charts'},
-              { title: 'Maps', icon: 'mdi-circle-small', link: '/maps'},
-            ],
-          },
           { divider: true },
           { heading: 'HELP' },
           { title: 'Library', icon: 'mdi-book-variant-multiple', href: 'https://flatlogic.com/templates'},

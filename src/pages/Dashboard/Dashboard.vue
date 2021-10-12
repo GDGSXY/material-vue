@@ -2,21 +2,10 @@
   <v-container fluid>
     <div class="dashboard-page">
       <v-row no-gutters class="d-flex justify-space-between mt-10 mb-6">
-        <h1 class="page-title">Dashboard</h1>
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              color="secondary"
-              class="text-capitalize button-shadow mr-1"
-              >Latest Reports</v-btn
-            >
-          </template>
-        </v-menu>
+        <h1 class="page-title">首页</h1>
       </v-row>
       <v-row>
-        <v-col lg="3" sm="6" md="5" cols="12">
+        <v-col lg="6" sm="12" md="10" cols="24">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
               <p>Visits Today</p>
@@ -82,7 +71,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col lg="3" sm="6" md="7" cols="12">
+        <v-col lg="6" sm="12" md="14" cols="24">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
               <p>App Performance</p>
@@ -139,129 +128,6 @@
                     background-color="#ececec"
                     color="warning"
                   ></v-progress-linear>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col lg="3" sm="6" md="7" cols="12">
-          <v-card class="mx-1 mb-1" style="min-height: 228px">
-            <v-card-title class="pa-6 pb-3">
-              <p>Server Overview</p>
-              <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, i) in mock.menu"
-                    :key="i"
-                    @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-title>
-            <v-card-text class="pa-6 pt-0">
-              <v-row no-gutters>
-                <v-col
-                  cols="6"
-                  md="5"
-                  lg="6"
-                  xl="4"
-                  class="my-auto text-truncate"
-                >
-                  <span>60% / 37°С / 3.3 Ghz</span>
-                </v-col>
-                <v-col cols="6" md="7" lg="6" xl="8">
-                  <ApexChart
-                    v-if="apexLoading"
-                    height="35"
-                    type="area"
-                    :options="mock.apexArea1.options"
-                    :series="mock.apexArea1.series"
-                  ></ApexChart>
-                </v-col>
-              </v-row>
-              <v-row no-gutters class="my-3">
-                <v-col
-                  cols="6"
-                  md="5"
-                  lg="6"
-                  xl="4"
-                  class="my-auto text-truncate"
-                >
-                  <span>54% / 31°С / 3.3 Ghz</span>
-                </v-col>
-                <v-col cols="6" md="7" lg="6" xl="8">
-                  <ApexChart
-                    v-if="apexLoading"
-                    height="35"
-                    type="area"
-                    :options="mock.apexArea2.options"
-                    :series="mock.apexArea2.series"
-                  ></ApexChart>
-                </v-col>
-              </v-row>
-              <v-row no-gutters>
-                <v-col
-                  cols="6"
-                  md="5"
-                  lg="6"
-                  xl="4"
-                  class="my-auto text-truncate"
-                >
-                  <span>57% / 21°С / 3.3 Ghz</span>
-                </v-col>
-                <v-col cols="6" md="7" lg="6" xl="8">
-                  <ApexChart
-                    v-if="apexLoading"
-                    height="35"
-                    type="area"
-                    :options="mock.apexArea3.options"
-                    :series="mock.apexArea3.series"
-                  ></ApexChart>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col lg="3" sm="6" md="5" cols="12">
-          <v-card class="mx-1 mb-1" style="height: 228px">
-            <v-card-title class="flex-nowrap pa-6 pb-3">
-              <p class="text-truncate">Revenue Breakdown</p>
-              <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, i) in mock.menu"
-                    :key="i"
-                    @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-title>
-            <v-card-text class="pa-6 pt-0 mb-1">
-              <v-row no-gutters>
-                <v-col cols="12">
-                  <ApexChart
-                    height="124"
-                    type="donut"
-                    class="mt-1"
-                    :options="mock.apexPie.options"
-                    :series="generatePieSeries()"
-                  ></ApexChart>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -555,46 +421,53 @@
               </v-menu>
             </v-card-title>
             <v-card-text class="pa-0">
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead class="pl-2">
-                    <tr>
-                      <th class="text-left pa-6">NAME</th>
-                      <th class="text-left">EMAIL</th>
-                      <th class="text-left">PRODUCT</th>
-                      <th class="text-left">PRICE</th>
-                      <th class="text-left">DATE</th>
-                      <th class="text-left">CITY</th>
-                      <th class="text-left">STATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in mock.table" :key="item.name">
-                      <td class="pa-6">{{ item.name }}</td>
-                      <td>{{ item.email }}</td>
-                      <td>{{ item.product }}</td>
-                      <td>{{ item.price }}</td>
-                      <td>{{ item.date }}</td>
-                      <td>{{ item.city }}</td>
-                      <td v-if="item.status === 'Sent'">
-                        <v-chip link color="success" class="ma-2 ml-0">
-                          Sent
-                        </v-chip>
-                      </td>
-                      <td v-else-if="item.status === 'Pending'">
-                        <v-chip link color="warning" class="ma-2 ml-0">
-                          Pending
-                        </v-chip>
-                      </td>
-                      <td v-else-if="item.status === 'Declined'">
-                        <v-chip link color="secondary" class="ma-2 ml-0">
-                          Declined
-                        </v-chip>
-                      </td>
-                    </tr>
-                  </tbody>
+              <v-data-table
+                  @click:row="getStudentData"
+                  :headers="bjdmDessertHeaders"
+                  :items="classTableData"
+                  item-key="id"
+                  show-expand
+                  :page.sync="page"
+                  :items-per-page="itemsPerPage"
+                  hide-default-footer
+                  @page-count="pageCount = $event"
+              >
+                <template v-slot:top>
+                  <v-toolbar flat>
+                    <v-toolbar-title>Expandable Table</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-switch
+                        v-model="singleExpand"
+                        label="Single expand"
+                        class="mt-2"
+                    ></v-switch>
+                  </v-toolbar>
                 </template>
-              </v-simple-table>
+                <template v-slot:expanded-item="{ headers }">
+                  <td :colspan="headers.length">
+                    <v-data-table
+                        :headers="studentDessertHeaders"
+                        :items="studentTableData"
+                        hide-default-header
+                        hide-default-footer
+                    ></v-data-table>
+                  </td>
+                </template>
+              </v-data-table>
+              <div class="text-center pt-2">
+                <v-pagination
+                    v-model="page"
+                    :length="5"
+                ></v-pagination>
+                <v-text-field
+                    :value="itemsPerPage"
+                    label="Items per page"
+                    type="number"
+                    min="-1"
+                    max="15"
+                    @input="itemsPerPage = parseInt($event, 10)"
+                ></v-text-field>
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -604,9 +477,12 @@
 </template>
 
 <script>
-import mock from "./mock";
-import Trend from "vuetrend";
-import ApexChart from "vue-apexcharts";
+import mock from "./mock"
+import Trend from "vuetrend"
+import ApexChart from "vue-apexcharts"
+import { getRequest } from "@/utils/request"
+import classInfo from "@/api/ClassInfo"
+import studentInfo from '@/api/StudentInfo'
 
 export default {
   name: "Dashboard",
@@ -616,14 +492,87 @@ export default {
   },
   data() {
     return {
+      singleExpand: false,
       mock,
       apexLoading: false,
       value: this.getRandomInt(10, 90),
       value2: this.getRandomInt(10, 90),
       mainApexAreaSelect: "Daily",
+      classTableData: [],
+      studentTableData: [],
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 10,
+      bjdmDessertHeaders: [
+        { text: '班级代码', value: 'bjdm', align: 'start' },
+        { text: '班级名称', value: 'bjmc' },
+        { text: '学院代码', value: 'xydm' },
+        { text: '学院名称', value: 'xymc' },
+        { text: '开设年份', value: 'ksnf' },
+        { text: '学制', value: 'xz' },
+        { text: '专业代码', value: 'zydm' },
+        { text: '专业名称', value: 'zymc' },
+        { text: '培养层次', value: 'pycc' },
+        { text: '校区代码', value: 'xqdm' },
+        { text: '校区名称', value: 'xqmc' },
+        { text: '毕业状态', value: 'status' },
+        { text: '班级人数', value: 'count' }
+      ],
+      studentDessertHeaders: [
+        { text: '学号', value: 'xh', align: 'start' },
+        { text: '姓名', value: 'xm', },
+        { text: '性别', value: 'xb' },
+        { text: '姓名拼音', value: 'xmpy' },
+        { text: '准考证号', value: 'zkzh' },
+        { text: '出生日期', value: 'csrq' },
+        { text: '民族', value: 'mz' },
+        { text: '学院', value: 'xymc' },
+        { text: '二级学院代码', value: 'xydm' },
+        { text: '专业', value: 'zymc' },
+        { text: '专业代码', value: 'zydm' },
+        { text: '班级', value: 'bjdm' },
+        { text: '班级代码', value: 'bjmc' },
+        { text: '学制', value: 'zx' },
+        { text: '学籍状态', value: 'zjzt' },
+        { text: '年级', value: 'nj' },
+        { text: '入学日期', value: 'rxnf' },
+        { text: '考生类别', value: 'kslb' },
+        { text: '原毕业学校', value: 'xyxx' },
+        { text: '入学方式', value: 'rxfs' },
+        { text: '办学形式', value: 'bxxs' },
+        { text: '培养层次', value: 'pycc' },
+        { text: '生源所在地', value: 'syszd' },
+        { text: '', value: 'data-table-expand' }
+      ]
     };
   },
+  created() {
+    this.getTeacherTable()
+  },
   methods: {
+    getTeacherTable() {
+      getRequest(classInfo.getClassTableData, {
+        current: this.page,
+        pageSize: this.itemsPerPage
+      })
+      .then(response => {
+        if (response.code === 0) {
+          this.classTableData = response.data.records
+        } else {
+          alert(response.msg)
+        }
+      })
+    },
+    getStudentData (item) {
+      getRequest(studentInfo.getStudentTable + '/' + item.id)
+      .then(response => {
+        if (response.code === 0) {
+          this.studentTableData = response.data
+        } else {
+          alert(response.msg)
+        }
+      })
+    },
     getRandomDataForTrends() {
       const arr = [];
       for (let i = 0; i < 12; i += 1) {
