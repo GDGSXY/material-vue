@@ -101,6 +101,9 @@
           password: this.password
         }).then(response => {
           if (response.code === 0) {
+            localStorage.setItem('token', response.data)
+          } else {
+            alert(response.msg)
           }
         })*/
         this.$router.push('/dashboard');
