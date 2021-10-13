@@ -102,6 +102,7 @@
         }).then(response => {
           if (response.code === 0) {
             localStorage.setItem('token', response.data)
+            this.$router.push('/dashboard');
           } else {
             alert(response.msg)
           }
