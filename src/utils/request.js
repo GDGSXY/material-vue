@@ -11,12 +11,12 @@ const instance = axios.create({
 })
 
 // 添加请求拦截器
-/*instance.interceptors.request.use(config => {
-    config.headers.Authorization = sessionStorage.getItem('token')
+instance.interceptors.request.use(config => {
+    config.headers.Authorization = localStorage.getItem('token')
     return config
 }, error => {
     return Promise.reject(error)
-})*/
+})
 
 // 添加响应拦截器
 instance.interceptors.response.use(response => {
