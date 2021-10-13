@@ -2,13 +2,15 @@
   <v-card class="support-requests mx-1 mb-1">
     <v-card-text class="pa-0">
       <v-data-table
-          @click:row="getStudentData"
+          @item-expanded="getStudentData"
           :headers="bjdmDessertHeaders"
           :items="classTableData"
           item-key="id"
           show-expand
           :page.sync="page"
           :items-per-page="itemsPerPage"
+          :expanded.sync="expanded"
+          :single-expand="true"
           hide-default-footer
       >
         <template v-slot:top>
@@ -29,9 +31,9 @@
         </template>
       </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination
+        <v-pagination @input="updatePage"
             v-model="page"
-            :length="5"
+            :length="pageCount"
         ></v-pagination>
       </div>
     </v-card-text>
@@ -47,11 +49,12 @@ export default {
   name: "InfoManager",
   data () {
     return {
+      expanded: [],
       classTableData: [],
       studentTableData: [],
       page: 1,
       pageCount: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 2,
       bjdmDessertHeaders: [
         { text: '班级代码', value: 'bjdm', align: 'start' },
         { text: '班级名称', value: 'bjmc' },
@@ -107,13 +110,18 @@ export default {
           .then(response => {
             if (response.code === 0) {
               this.classTableData = response.data.records
+              this.pageCount = response.data.total / response.data.size + 1
             } else {
               alert(response.msg)
             }
           })
     },
     getStudentData (item) {
-      getRequest(studentInfo.getStudentTable + '/' + item.id)
+      this.studentTableData = []
+      if (!item.value) {
+        return
+      }
+      getRequest(studentInfo.getStudentTable + '/' + item.item.id)
           .then(response => {
             if (response.code === 0) {
               this.studentTableData = response.data
@@ -122,6 +130,10 @@ export default {
             }
           })
     },
+    updatePage (number) {
+      this.page = number
+      this.getClassData()
+    }
   }
 }
 </script>
