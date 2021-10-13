@@ -77,37 +77,41 @@
 </template>
 
 <script>
-// import { postRequest } from '@/utils/request'
-// import system from '@/api/System'
+import { postRequest } from '@/utils/request'
+import system from '@/api/System'
   export default {
     name: 'Login',
     data() {
       return {
-        username: 'admin',
+        username: 'Admin',
         emailRules: [
           v => !!v || 'username is required'
         ],
-        password: '123456',
+        password: 'admin',
         passRules: [
           v => !!v || 'Password is required',
-          v => v.length >= 6 || 'Min 6 characters'
+          v => v.length >= 5 || 'Min 5 characters'
         ]
       }
     },
     methods: {
       login(){
-        /*postRequest(system.login, {
+        postRequest(system.login, {
           username: this.username,
           password: this.password
         }).then(response => {
           if (response.code === 0) {
-            localStorage.setItem('token', response.data)
+            localStorage.setItem('token', response.data.token)
+            let info = {
+              userId: response.data.id,
+              username: response.data.username
+            }
+            localStorage.setItem('info', JSON.stringify(info))
             this.$router.push('/dashboard');
           } else {
             alert(response.msg)
           }
-        })*/
-        this.$router.push('/dashboard');
+        })
       }
     }
   }

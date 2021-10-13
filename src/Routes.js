@@ -14,6 +14,7 @@ import Maps from '@/pages/Maps/Google'
 import Error from "@/pages/Error/Error";
 import Login from "@/pages/Login/Login";
 import InfoManager from "@/pages/Info/InfoManager";
+import Profile from "@/pages/Profile/Profile";
 
 Vue.use(Router);
 
@@ -39,6 +40,11 @@ export default new Router({
         path: 'info-manager',
         name: 'InfoManager',
         component: InfoManager
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: Profile
       },
       {
         path: 'typography',

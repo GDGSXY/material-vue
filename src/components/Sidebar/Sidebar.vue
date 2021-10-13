@@ -103,6 +103,7 @@ import {mapActions, mapState} from 'vuex'
         items: [
           { title: 'Dashboard', icon: 'mdi-home', link: '/dashboard' },
           { title: '学生信息', icon: 'mdi-help-circle-outline', link: '/info-manager' },
+          { title: 'Profile', icon: 'mdi-account', link: '/profile'},
           { title: 'Typography', icon: 'mdi-format-size', link: '/typography' },
           { title: 'Tables', icon: 'mdi-grid-large', link: '/tables' },
           { title: 'Notifications', icon: 'mdi-bell-outline', link: '/notifications' },

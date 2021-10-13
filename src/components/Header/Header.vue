@@ -140,7 +140,7 @@
             </v-btn>
         </template>
         <v-list >
-          <div class="text-h5 grey--text text--darken-3 px-4 pt-4">John Smith</div>
+          <div class="text-h5 grey--text text--darken-3 px-4 pt-4">{{ info.username }}</div>
           <div class="subtitle-2 primary--text font-weight-regular px-4">Flatlogic.com</div>
           <v-list-item-group color="primary">
             <v-list-item
@@ -201,7 +201,8 @@ import {mapActions, mapState} from 'vuex'
         { text: 'Messages', icon: 'mdi-flag', color: 'textColor'  }
       ],
       notificationsBadge: true,
-      messageBadge: true
+      messageBadge: true,
+      info: JSON.parse(localStorage.getItem('info'))
     }),
     computed: {
       ...mapState(['drawer']),
@@ -214,7 +215,7 @@ import {mapActions, mapState} from 'vuex'
     methods: {
       ...mapActions([ 'TOGGLE_DRAWER' ]),
       logOut: function () {
-        window.localStorage.setItem('authenticated', false);
+        window.localStorage.removeItem('token')
         this.$router.push('/login');
       }
     }
