@@ -13,7 +13,7 @@
         <v-icon style="font-size: 28px">mdi-menu</v-icon>
       </template>
     </v-btn>
-    <v-toolbar-title>广东工商职业技术大学管理系统</v-toolbar-title>
+    <v-toolbar-title>GDBTU Management System</v-toolbar-title>
     <v-spacer></v-spacer>
     <Search />
 
