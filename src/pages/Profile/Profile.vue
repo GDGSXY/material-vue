@@ -8,7 +8,7 @@
         <v-card class="mx-1 mb-1">
           <v-card-title class="pa-6 pb-3">
             <div style="border: 1px dashed #ff4081; border-radius: 50%; padding: 8px">
-              <v-img src="@/assets/3.png"></v-img>
+              <v-img src="@/assets/profile.png"></v-img>
             </div>
             <div style="margin-left: 15px">
               <h3>Julee Cruise</h3>
