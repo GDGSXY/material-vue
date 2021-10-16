@@ -83,7 +83,7 @@ import system from '@/api/System'
     name: 'Login',
     data() {
       return {
-        username: 'Admin',
+        username: 'admin',
         emailRules: [
           v => !!v || 'username is required'
         ],
