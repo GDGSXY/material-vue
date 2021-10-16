@@ -5,7 +5,7 @@
         <v-col cols="7" class="main-part d-none d-md-none d-lg-flex">
           <div class="d-flex">
             <v-img src="@/assets/logo.svg" contain></v-img>
-            <p>广工商职业技术大学管理系统</p>
+            <p>GDBTU Management System</p>
           </div>
         </v-col>
         <v-col cols="12" lg="5" class="login-part d-flex align-center justify-center">
@@ -18,12 +18,13 @@
                     LOGIN
                   </v-tab>
 
-                  <v-tab-item :value="'tab-login'" >
+                  <v-tab-item :value="'tab-login'">
                     <v-form>
                       <v-container>
                         <v-row class="flex-column">
                           <v-col>
-                            <p class="login-slogan display-2 text-center font-weight-medium my-10">Good Morning, User</p>
+                            <p class="login-slogan display-2 text-center font-weight-medium my-10">Good Morning,
+                              User</p>
                           </v-col>
                           <v-form>
                             <v-col>
@@ -52,7 +53,8 @@
                                   color="primary"
                                   @click="login"
                               >
-                                Login</v-btn>
+                                Login
+                              </v-btn>
                               <v-btn large text class="text-capitalize primary--text">Forget Password</v-btn>
                             </v-col>
                           </v-form>
@@ -77,44 +79,46 @@
 </template>
 
 <script>
-import { postRequest } from '@/utils/request'
+import {postRequest} from '@/utils/request'
 import system from '@/api/System'
-  export default {
-    name: 'Login',
-    data() {
-      return {
-        username: 'admin',
-        emailRules: [
-          v => !!v || 'username is required'
-        ],
-        password: 'admin',
-        passRules: [
-          v => !!v || 'Password is required',
-          v => v.length >= 5 || 'Min 5 characters'
-        ]
-      }
-    },
-    methods: {
-      login(){
-        postRequest(system.login, {
-          username: this.username,
-          password: this.password
-        }).then(response => {
-          if (response.code === 0) {
-            localStorage.setItem('token', response.data.token)
-            let info = {
-              userId: response.data.id,
-              username: response.data.username
-            }
-            localStorage.setItem('info', JSON.stringify(info))
-            this.$router.push('/dashboard');
-          } else {
-            alert(response.msg)
+
+export default {
+  name: 'Login',
+  data() {
+    return {
+      username: 'admin',
+      emailRules: [
+        v => !!v || 'username is required'
+      ],
+      password: 'admin',
+      passRules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 5 || 'Min 5 characters'
+      ]
+    }
+  },
+  methods: {
+    login() {
+      postRequest(system.login, {
+        username: this.username,
+        password: this.password
+      }).then(response => {
+        if (response.code === 0) {
+          localStorage.setItem('token', response.data.token)
+          let info = {
+            userId: response.data.id,
+            username: response.data.username,
+            permissions: response.data.permissions
           }
-        })
-      }
+          localStorage.setItem('info', JSON.stringify(info))
+          this.$router.push('/dashboard');
+        } else {
+          alert(response.msg)
+        }
+      })
     }
   }
+}
 
 </script>
 
