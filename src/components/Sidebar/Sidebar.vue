@@ -12,79 +12,79 @@
     <v-list>
       <template v-for="(item, i) in items">
         <v-row
-          v-if="item.heading"
-          :key="item.heading"
-          align="center">
+            v-if="item.heading"
+            :key="item.heading"
+            align="center">
           <v-col cols="6" class="py-5">
             <span
-              style="padding-left: 32px"
-              class="text-body-1 subheader"
-              :class="(item.heading && DRAWER_STATE) ? 'show ' : 'hide'">
+                style="padding-left: 32px"
+                class="text-body-1 subheader"
+                :class="(item.heading && DRAWER_STATE) ? 'show ' : 'hide'">
               {{ item.heading }}
               </span>
           </v-col>
           <v-col
-            cols="6"
-            class="text-center">
+              cols="6"
+              class="text-center">
           </v-col>
         </v-row>
         <v-divider
-          v-else-if="item.divider"
-          :key="i"
-          dark
-          class="my-4"
+            v-else-if="item.divider"
+            :key="i"
+            dark
+            class="my-4"
         ></v-divider>
         <v-list-group
-          color="primary"
-          v-else-if="item.children && DRAWER_STATE"
-          :key="item.title"
-          v-model="item.model"
-          append-icon="">
-            <template v-slot:prependIcon>
-              <v-icon size="28">mdi-image-filter-none</v-icon>
-            </template>
-            <template v-slot:activator >
-              <v-list-item-content >
-                <v-list-item-title
+            color="primary"
+            v-else-if="item.children && DRAWER_STATE"
+            :key="item.title"
+            v-model="item.model"
+            append-icon="">
+          <template v-slot:prependIcon>
+            <v-icon size="28">mdi-image-filter-none</v-icon>
+          </template>
+          <template v-slot:activator >
+            <v-list-item-content >
+              <v-list-item-title
                   class="grey--text">
-                    {{ item.title }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item
               v-for="(child, i) in item.children"
               :key="i"
               :to="child.link"
               link>
-                <v-list-item-action v-if="child.icon">
-                  <v-icon dense>{{ child.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title class="grey--text">
-                    {{ child.title }}
-                  </v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list-group>
-        <v-list-item
-          color="primary"
-          v-else
-          :key="item.text"
-          :href="item.href ? item.href : null"
-          :to="item.link === '#' ? null : item.link"
-          link>
-          <v-list-item-action>
-            <v-icon dense
-              :color="item.color ? item.color : ''"
-            >{{ item.icon }}</v-icon>
-          </v-list-item-action>
+            <v-list-item-action v-if="child.icon">
+              <v-icon dense>{{ child.icon }}</v-icon>
+            </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title
-                class="grey--text"
-                link>
-                {{ item.title }}
+              <v-list-item-title class="grey--text">
+                {{ child.title }}
               </v-list-item-title>
             </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+        <v-list-item
+            color="primary"
+            v-else
+            :key="item.text"
+            :href="item.href ? item.href : null"
+            :to="item.link === '#' ? null : item.link"
+            link>
+          <v-list-item-action>
+            <v-icon dense
+                    :color="item.color ? item.color : ''"
+            >{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title
+                class="grey--text"
+                link>
+              {{ item.title }}
+            </v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
       </template>
     </v-list>
@@ -93,6 +93,7 @@
 
 <script>
 import {mapActions, mapState} from 'vuex'
+import {validPermission} from "@/utils/Routes";
 
   export default {
     props: {
@@ -100,18 +101,8 @@ import {mapActions, mapState} from 'vuex'
     },
     data(){
       return {
-        items: [
-          { title: '首页', icon: 'mdi-home', link: '/dashboard' },
-          // { title: 'Profile', icon: 'mdi-account', link: '/profile'},
-          { title: '角色管理', icon: 'mdi-account', link: '/role'},
-          { title: '学生管理', icon: 'mdi-account', link: '/student'},
-          { title: '教职工管理', icon: 'fa-graduation-cap', link: '/teacher'},
-          { title: '学院管理', icon: 'mdi-account', link: '/depart'},
-          { title: '专业管理', icon: 'mdi-account', link: '/major'},
-          { title: '班级管理', icon: 'mdi-account', link: '/clazz'},
-          { title: 'Icon', icon: 'mdi-account', link: '/icons' },
-          { title: 'Notifications', icon: 'mdi-bell-outline', link: '/notifications' },
-        ],
+        info: JSON.parse(localStorage.getItem('info')),
+        items: [],
         sidebarWidth: 240,
         sidebarMinWidth: 96
       }
@@ -128,8 +119,17 @@ import {mapActions, mapState} from 'vuex'
         }
       }
     },
+    created() {
+      this.getRoutesData()
+    },
     methods: {
       ...mapActions([ 'TOGGLE_DRAWER' ]),
+      getRoutesData() {
+        const permissions = this.info.permissions
+        this.items = validPermission(permissions)
+        const arr = validPermission(permissions)
+        console.log(arr)
+      }
     }
   }
 </script>
