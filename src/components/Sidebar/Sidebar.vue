@@ -101,23 +101,16 @@ import {mapActions, mapState} from 'vuex'
     data(){
       return {
         items: [
-          { title: 'Dashboard', icon: 'mdi-home', link: '/dashboard' },
-          { title: '学生信息', icon: 'mdi-help-circle-outline', link: '/info-manager' },
-          { title: 'Profile', icon: 'mdi-account', link: '/profile'},
-          { title: 'Typography', icon: 'mdi-format-size', link: '/typography' },
-          { title: 'Tables', icon: 'mdi-grid-large', link: '/tables' },
+          { title: '首页', icon: 'mdi-home', link: '/dashboard' },
+          // { title: 'Profile', icon: 'mdi-account', link: '/profile'},
+          { title: '角色管理', icon: 'mdi-account', link: '/role'},
+          { title: '学生管理', icon: 'mdi-account', link: '/student'},
+          { title: '教职工管理', icon: 'fa-graduation-cap', link: '/teacher'},
+          { title: '学院管理', icon: 'mdi-account', link: '/depart'},
+          { title: '专业管理', icon: 'mdi-account', link: '/major'},
+          { title: '班级管理', icon: 'mdi-account', link: '/clazz'},
+          { title: 'Icon', icon: 'mdi-account', link: '/icons' },
           { title: 'Notifications', icon: 'mdi-bell-outline', link: '/notifications' },
-          { divider: true },
-          { heading: 'HELP' },
-          { title: 'Library', icon: 'mdi-book-variant-multiple', href: 'https://flatlogic.com/templates'},
-          { title: 'Support', icon: 'mdi-forum', href: 'https://flatlogic.com/forum/'},
-          { title: 'FAQ', icon: 'mdi-help-circle-outline', href:'https://flatlogic.com/templates/vue-material-template'},
-          { divider: true },
-          { heading: 'PROJECTS' },
-          { title: 'My recent', icon: 'mdi-circle-medium', color: 'warning'},
-          { title: 'Starred', icon: 'mdi-circle-medium', color: 'primary'},
-          { title: 'Background', icon: 'mdi-circle-medium', color: 'error'}
-
         ],
         sidebarWidth: 240,
         sidebarMinWidth: 96

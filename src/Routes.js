@@ -5,16 +5,17 @@ import Layout from '@/components/Layout/Layout';
 
 // Pages
 import Dashboard from '@/pages/Dashboard/Dashboard';
-import Typography from '@/pages/Typography/Typography'
-import Tables from '@/pages/Tables/Basic'
-import Notifications from '@/pages/Notifications/Notifications'
 import Icons from '@/pages/Icons/Icons'
 import Charts from '@/pages/Charts/Charts'
 import Maps from '@/pages/Maps/Google'
 import Error from "@/pages/Error/Error";
 import Login from "@/pages/Login/Login";
-import InfoManager from "@/pages/Info/InfoManager";
-import Profile from "@/pages/Profile/Profile";
+import Role from "@/pages/Role/Role";
+import Student from "@/pages/Student/Student";
+import Teacher from "@/pages/Teacher/Teacher";
+import Academy from "@/pages/Academy/Academy";
+import Major from "@/pages/Major/Major";
+import Clazz from "@/pages/Clazz/Clazz";
 
 Vue.use(Router);
 
@@ -37,29 +38,34 @@ export default new Router({
         component: Dashboard,
       },
       {
-        path: 'info-manager',
-        name: 'InfoManager',
-        component: InfoManager
+        path: 'role',
+        name: 'Role',
+        component: Role
       },
       {
-        path: 'profile',
-        name: 'Profile',
-        component: Profile
+        path: 'student',
+        name: 'Student',
+        component: Student
       },
       {
-        path: 'typography',
-        name: 'Typography',
-        component: Typography,
+        path: 'teacher',
+        name: 'Teacher',
+        component: Teacher
       },
       {
-        path: 'tables',
-        name: 'Tables',
-        component: Tables
+        path: 'depart',
+        name: 'Depart',
+        component: Academy
       },
       {
-        path: 'notifications',
-        name: 'Notifications',
-        component: Notifications
+        path: 'major',
+        name: 'Major',
+        component: Major
+      },
+      {
+        path: 'clazz',
+        name: 'Clazz',
+        component: Clazz
       },
       {
         path: 'icons',
