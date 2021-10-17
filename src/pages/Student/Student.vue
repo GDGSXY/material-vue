@@ -195,7 +195,6 @@
     <OperationLog
         :items="operationLogList"
         :current="operationLogListCurrent"
-        :size="operationLogListSize"
         :total="operationLogListTotal"
         @load-next-page="loadNextOperationLog"
     />
@@ -314,7 +313,6 @@ export default {
   },
   created () {
     this.getStudentData()
-    this.getOperationLogData(1, this.operationLogListPageSize)
   },
   methods: {
     getStudentData () {
@@ -325,7 +323,7 @@ export default {
         classId: this.classId,
       }).then(response => {
         if (response.code === 0) {
-          this.getOperationLogData(1, 1)
+          this.getOperationLogData(1, this.operationLogListPageSize)
           this.tableData = response.data.records
           this.pageCount = Number(response.data.pages)
           this.$toast.success("查询成功", config.options)
@@ -472,7 +470,6 @@ export default {
           this.operationLogList = [...this.operationLogList, ...res.data.records]
           this.operationLogListTotal = Number(res.data.total)
           this.operationLogListCurrent = Number(res.data.current)
-          this.operationLogListSize = Number(res.data.size)
         } else {
           this.$toast.error(res.msg, config.options)
         }
