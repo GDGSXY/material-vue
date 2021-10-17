@@ -110,14 +110,16 @@
                                 item-value="value"
                                 label="请选择性别"
                                 @change="v => editedItem.gender = v"></v-select>
-                    </v-col><v-col cols="12" sm="6" md="4">
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
                       <v-select :items="studentStatus"
                                 item-text="name"
                                 item-value="value"
                                 label="学生状态"
                                 @change="v => editedItem.studentStatus = v"></v-select>
                     </v-col>
-                    '<v-col cols="12" sm="6" md="4">
+                    '
+                    <v-col cols="12" sm="6" md="4">
                       <v-select :items="politicalOutlook"
                                 item-text="name"
                                 item-value="value"
@@ -189,18 +191,28 @@
           :length="pageCount"
       ></v-pagination>
     </div>
+    <OperationLog
+        :items="operationLogList"
+        :current="operationLogListCurrent"
+        :size="operationLogListSize"
+        :total="operationLogListTotal"
+        @load-next-page="loadNextOperationLog"
+    />
   </v-container>
 </template>
 
 <script>
-import {deleteRequest, getRequest, postRequest, putRequest} from "@/utils/request";
+import { deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
 import studentApi from '@/api/StudentInfo'
 import academyApi from '@/api/AcademyInfo'
 import majorApi from '@/api/MajorInfo'
 import classApi from '@/api/ClassInfo'
+import operationLogApi from '@/api/OperationLog'
+import OperationLog from '@/components/OperationLog/OperationLog'
 
 export default {
-  name: "Student",
+  name: 'Student',
+  components: { OperationLog },
   data () {
     return {
       dialog: false,
@@ -219,7 +231,7 @@ export default {
       tableData: [],
       editedIndex: -1,
       headers: [
-        { text: '姓名', sortable: false, value: 'name', align: 'start'},
+        { text: '姓名', sortable: false, value: 'name', align: 'start' },
         { text: '学号', sortable: false, value: 'studentCode' },
         { text: '性别', sortable: false, value: 'gender' },
         { text: '学籍状态', sortable: false, value: 'studentStatus' },
@@ -270,15 +282,19 @@ export default {
         { value: 'EXPELLED', name: '已开除' },
         { value: 'REGISTERED', name: '已注册' },
         { value: 'SUSPENDED', name: '已休学' },
-        { value: 'UNREGISTERED', name: '未注册' }
+        { value: 'UNREGISTERED', name: '未注册' },
       ],
       politicalOutlook: [
         { value: 'CPC', name: '中共党员' },
         { value: 'P_CPC', name: '中共预备党员' },
         { value: 'CYL', name: '共青团员' },
         { value: 'NORMAL', name: '群众' },
-        { value: 'OTHER', name: '其他' }
-      ]
+        { value: 'OTHER', name: '其他' },
+      ],
+      operationLogList: [],
+      operationLogListTotal: 0,
+      operationLogListCurrent: 0,
+      operationLogListSize: 0,
     }
   },
   computed: {
@@ -294,8 +310,9 @@ export default {
       val || this.closeDelete()
     },
   },
-  created() {
+  created () {
     this.getStudentData()
+    this.getOperationLogData(1, 1)
   },
   methods: {
     getStudentData () {
@@ -303,7 +320,7 @@ export default {
         current: this.page,
         pageSize: this.itemsPerPage,
         search: this.search,
-        classId: this.classId
+        classId: this.classId,
       }).then(response => {
         if (response.code === 0) {
           this.tableData = response.data.records
@@ -317,9 +334,9 @@ export default {
             draggable: false,
             showCloseButtonOnHover: false,
             hideProgressBar: true,
-            closeButton: "button",
-            icon: true
-          });
+            closeButton: 'button',
+            icon: true,
+          })
         }
       })
     },
@@ -336,9 +353,9 @@ export default {
             draggable: false,
             showCloseButtonOnHover: false,
             hideProgressBar: true,
-            closeButton: "button",
-            icon: true
-          });
+            closeButton: 'button',
+            icon: true,
+          })
         }
       })
     },
@@ -356,9 +373,9 @@ export default {
             draggable: false,
             showCloseButtonOnHover: false,
             hideProgressBar: true,
-            closeButton: "button",
-            icon: true
-          });
+            closeButton: 'button',
+            icon: true,
+          })
         }
       })
     },
@@ -376,19 +393,19 @@ export default {
             draggable: false,
             showCloseButtonOnHover: false,
             hideProgressBar: true,
-            closeButton: "button",
-            icon: true
-          });
+            closeButton: 'button',
+            icon: true,
+          })
         }
       })
     },
-    editItem(item) {
+    editItem (item) {
       this.editedIndex = this.tableData.indexOf(item)
       this.studentId = item.id
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
-    deleteItem(item) {
+    deleteItem (item) {
       this.studentId = item.id
       this.dialogDelete = true
     },
@@ -402,24 +419,24 @@ export default {
     },
     deleteItemConfirm () {
       deleteRequest(studentApi.getStudentTable + `/${this.studentId}`)
-      .then(response => {
-        if (response.code === 0) {
-          this.closeDelete()
-          this.getStudentData()
-        } else {
-          this.$toast.error(response.msg, {
-            position: this.position,
-            timeout: 3000,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: "button",
-            icon: true
-          });
-        }
-      })
+          .then(response => {
+            if (response.code === 0) {
+              this.closeDelete()
+              this.getStudentData()
+            } else {
+              this.$toast.error(response.msg, {
+                position: this.position,
+                timeout: 3000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: 'button',
+                icon: true,
+              })
+            }
+          })
     },
 
     close () {
@@ -452,7 +469,7 @@ export default {
           identificationNumber: this.editedItem.identificationNumber,
           homePhone: this.editedItem.homePhone,
           nationality: this.editedItem.nationality,
-          concatPhone: this.editedItem.concatPhone
+          concatPhone: this.editedItem.concatPhone,
         }).then(response => {
           if (response.code === 0) {
             this.close()
@@ -466,8 +483,8 @@ export default {
               draggable: false,
               showCloseButtonOnHover: false,
               hideProgressBar: true,
-              closeButton: "button",
-              icon: true
+              closeButton: 'button',
+              icon: true,
             })
           }
         })
@@ -488,7 +505,7 @@ export default {
           identificationNumber: this.editedItem.identificationNumber,
           homePhone: this.editedItem.homePhone,
           nationality: this.editedItem.nationality,
-          concatPhone: this.editedItem.concatPhone
+          concatPhone: this.editedItem.concatPhone,
         }).then(response => {
           if (response.code === 0) {
             this.close()
@@ -502,14 +519,36 @@ export default {
               draggable: false,
               showCloseButtonOnHover: false,
               hideProgressBar: true,
-              closeButton: "button",
-              icon: true
+              closeButton: 'button',
+              icon: true,
             })
           }
         })
       }
-    }
-  }
+    },
+
+    getOperationLogData (current, pageSize) {
+      getRequest(operationLogApi.getOperationLog, {
+        current, pageSize,
+        position: operationLogApi.position.STUDENT_MANAGEMENT,
+      }).then(res => {
+        if (res.code === 0) {
+          this.operationLogList = [...this.operationLogList, ...res.data.records]
+          this.operationLogListTotal = Number(res.data.total)
+          this.operationLogListCurrent = Number(res.data.current)
+          this.operationLogListSize = Number(res.data.size)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    loadNextOperationLog ({ current, size }) {
+      this.getOperationLogData(current + 1, size)
+    },
+  },
+  comments: {
+    OperationLog,
+  },
 }
 </script>
 
