@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from "vue";
 
 // axios 配置
 const instance = axios.create({
@@ -22,7 +23,20 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(response => {
     return response
 }, error => {
-    return Promise.reject(error)
+    const code = error.response.status
+    if (code !== 200) {
+        Vue.$toast.error(error.response.data.msg, {
+            position: 'top-right',
+            timeout: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            showCloseButtonOnHover: false,
+            hideProgressBar: true,
+            closeButton: 'button',
+            icon: true
+        })
+    }
 })
 
 export default instance
@@ -47,6 +61,7 @@ export function getRequest (url, data = {}, headers) {
                 const data = response.data
                 resolve(data)
             }).catch(err => {
+            alert(err)
             reject(err)
         })
     })
