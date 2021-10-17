@@ -22,7 +22,7 @@
 
       </v-list-item>
 
-      <v-skeleton-loader v-if="items.length < total" v-intersect="loadNextPage" type="list-item@5" />
+      <v-skeleton-loader v-if="hasNext" v-intersect="loadNextPage" type="list-item@1" />
     </v-list>
   </v-container>
 </template>
@@ -39,24 +39,19 @@ export default {
       type: Number,
       required: true,
     },
-    size: {
-      type: Number,
-      required: true,
-    },
     total: {
       type: Number,
       required: true,
     },
   },
-  beforeUpdate () {
-    console.log(this.items)
-    console.log(this.items.length)
-    console.log(this.total)
+  computed: {
+    hasNext () {
+      return this.items.length < Number(this.total)
+    },
   },
   methods: {
     loadNextPage () {
-      const { items, current, size, total } = this
-      this.$emit('load-next-page', { items, current, size, total })
+      this.$emit('load-next-page', { current: this.current })
     },
   },
 }

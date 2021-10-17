@@ -194,7 +194,6 @@
     <OperationLog
         :items="operationLogList"
         :current="operationLogListCurrent"
-        :size="operationLogListSize"
         :total="operationLogListTotal"
         @load-next-page="loadNextOperationLog"
     />
@@ -293,8 +292,8 @@ export default {
       ],
       operationLogList: [],
       operationLogListTotal: 0,
-      operationLogListCurrent: 0,
-      operationLogListSize: 0,
+      operationLogListCurrent: 1,
+      operationLogListPageSize: 5,
     }
   },
   computed: {
@@ -312,7 +311,7 @@ export default {
   },
   created () {
     this.getStudentData()
-    this.getOperationLogData(1, 1)
+    this.getOperationLogData(1, this.operationLogListPageSize)
   },
   methods: {
     getStudentData () {
@@ -324,7 +323,7 @@ export default {
       }).then(response => {
         if (response.code === 0) {
           this.tableData = response.data.records
-          this.pageCount = response.data.total / this.itemsPerPage + 1
+          this.pageCount = Number(response.data.pages)
         } else {
           this.$toast.error(response.msg, {
             position: this.position,
@@ -542,8 +541,9 @@ export default {
         }
       })
     },
-    loadNextOperationLog ({ current, size }) {
-      this.getOperationLogData(current + 1, size)
+
+    loadNextOperationLog ({ current}) {
+      this.getOperationLogData(current + 1, this.operationLogListPageSize)
     },
   },
   comments: {
