@@ -9,6 +9,17 @@ export default {
       textColor: "#B9B9B9",
       iconColor: "#FFFFFF59",
       grayBold: '#4a4a4a'
+  },
+  options: {
+    position: 'top-right',
+    timeout: 3000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: false,
+    showCloseButtonOnHover: false,
+    hideProgressBar: true,
+    closeButton: 'button',
+    icon: true
   }
 };
 
