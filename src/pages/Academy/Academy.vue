@@ -136,6 +136,19 @@ export default {
       operationLogListCurrent: 1,
     }
   },
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? '添加学院信息' : '编辑学院信息'
+    },
+  },
+  watch: {
+    dialog (val) {
+      val || this.close()
+    },
+    dialogDelete (val) {
+      val || this.closeDelete()
+    },
+  },
   created() {
     this.getAcademyData()
     this.getOperationLogData(1, this.operationLogListPageSize)
