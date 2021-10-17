@@ -61,7 +61,6 @@ export function getRequest (url, data = {}, headers) {
                 const data = response.data
                 resolve(data)
             }).catch(err => {
-            alert(err)
             reject(err)
         })
     })
