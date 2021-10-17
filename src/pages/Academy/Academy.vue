@@ -130,14 +130,15 @@ export default {
       editedItem: {
         name: ''
       },
+      operationLogListPageSize: 5,
       operationLogList: [],
       operationLogListTotal: 0,
-      operationLogListCurrent: 0,
-      operationLogListPageSize: 5
+      operationLogListCurrent: 1,
     }
   },
   created() {
     this.getAcademyData()
+    this.getOperationLogData(1, this.operationLogListPageSize)
   },
   methods: {
     getAcademyData () {
@@ -148,7 +149,6 @@ export default {
       })
       .then(response => {
         if (response.code === 0) {
-          this.getOperationLogData(1, this.operationLogListPageSize)
           this.tableData = response.data.records
           this.pageCount = response.data.pages
           this.$toast.success("查询成功", config.options)
@@ -173,6 +173,7 @@ export default {
             if (response.code === 0) {
               this.closeDelete()
               this.getAcademyData()
+              this.getOperationLogData(1, this.operationLogListPageSize)
             } else {
               this.$toast.error(response.msg, config.options)
             }
@@ -201,7 +202,6 @@ export default {
           if (response.code === 0) {
             this.close()
             this.getAcademyData()
-            this.operationLogList = []
             this.getOperationLogData(1, this.operationLogListPageSize)
           } else {
             this.$toast.error(response.msg, config.options)
@@ -215,7 +215,6 @@ export default {
           if (response.code === 0) {
             this.close()
             this.getAcademyData()
-            this.operationLogList = []
             this.getOperationLogData(1, this.operationLogListPageSize)
           } else {
             this.$toast.error(response.msg,config.options)
@@ -224,7 +223,7 @@ export default {
       }
     },
 
-    getOperationLogData (current, pageSize) {
+    appendOperationLogData (current, pageSize) {
       getRequest(operationLogApi.getOperationLog, {
         current, pageSize,
         position: operationLogApi.position.ACADEMY_MANAGEMENT,
@@ -233,14 +232,29 @@ export default {
           this.operationLogList = [...this.operationLogList, ...res.data.records]
           this.operationLogListTotal = Number(res.data.total)
           this.operationLogListCurrent = Number(res.data.current)
-          this.operationLogListSize = Number(res.data.size)
         } else {
           this.$toast.error(res.msg, config.options)
         }
       })
     },
-    loadNextOperationLog ({ current, size }) {
-      this.getOperationLogData(current + 1, size)
+
+    getOperationLogData (current, pageSize) {
+      getRequest(operationLogApi.getOperationLog, {
+        current, pageSize,
+        position: operationLogApi.position.ACADEMY_MANAGEMENT,
+      }).then(res => {
+        if (res.code === 0) {
+          this.operationLogList = res.data.records
+          this.operationLogListTotal = Number(res.data.total)
+          this.operationLogListCurrent = Number(res.data.current)
+        } else {
+          this.$toast.error(res.msg, config.options)
+        }
+      })
+    },
+
+    loadNextOperationLog ({ current }) {
+      this.appendOperationLogData(current + 1, this.operationLogListPageSize)
     },
 
     updatePage (number) {

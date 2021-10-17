@@ -209,7 +209,7 @@ import majorApi from '@/api/MajorInfo'
 import classApi from '@/api/ClassInfo'
 import operationLogApi from '@/api/OperationLog'
 import OperationLog from '@/components/OperationLog/OperationLog'
-import config from "@/config";
+import config from '@/config'
 
 export default {
   name: 'Student',
@@ -292,10 +292,11 @@ export default {
         { value: 'NORMAL', name: '群众' },
         { value: 'OTHER', name: '其他' },
       ],
+      // 操作日志
+      operationLogListPageSize: 5,
       operationLogList: [],
       operationLogListTotal: 0,
       operationLogListCurrent: 1,
-      operationLogListPageSize: 5,
     }
   },
   computed: {
@@ -313,6 +314,7 @@ export default {
   },
   created () {
     this.getStudentData()
+    this.getOperationLogData(1, this.operationLogListPageSize)
   },
   methods: {
     getStudentData () {
@@ -323,10 +325,9 @@ export default {
         classId: this.classId,
       }).then(response => {
         if (response.code === 0) {
-          this.getOperationLogData(1, this.operationLogListPageSize)
           this.tableData = response.data.records
           this.pageCount = Number(response.data.pages)
-          this.$toast.success("查询成功", config.options)
+          this.$toast.success('查询成功', config.options)
         } else {
           this.$toast.error(response.msg, config.options)
         }
@@ -385,6 +386,7 @@ export default {
             if (response.code === 0) {
               this.closeDelete()
               this.getStudentData()
+              this.getOperationLogData(1, this.operationLogListPageSize)
             } else {
               this.$toast.error(response.msg, config.options)
             }
@@ -455,13 +457,13 @@ export default {
             this.getStudentData()
             this.getOperationLogData(1, this.operationLogListPageSize)
           } else {
-            this.$toast.error(response.msg,config.options)
+            this.$toast.error(response.msg, config.options)
           }
         })
       }
     },
 
-    getOperationLogData (current, pageSize) {
+    appendOperationLogData (current, pageSize) {
       getRequest(operationLogApi.getOperationLog, {
         current, pageSize,
         position: operationLogApi.position.STUDENT_MANAGEMENT,
@@ -476,8 +478,23 @@ export default {
       })
     },
 
-    loadNextOperationLog ({ current}) {
-      this.getOperationLogData(current + 1, this.operationLogListPageSize)
+    getOperationLogData (current, pageSize) {
+      getRequest(operationLogApi.getOperationLog, {
+        current, pageSize,
+        position: operationLogApi.position.STUDENT_MANAGEMENT,
+      }).then(res => {
+        if (res.code === 0) {
+          this.operationLogList = res.data.records
+          this.operationLogListTotal = Number(res.data.total)
+          this.operationLogListCurrent = Number(res.data.current)
+        } else {
+          this.$toast.error(res.msg, config.options)
+        }
+      })
+    },
+
+    loadNextOperationLog ({ current }) {
+      this.appendOperationLogData(current + 1, this.operationLogListPageSize)
     },
   },
   comments: {
