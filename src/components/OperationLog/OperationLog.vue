@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-list-item-title>操作记录</v-list-item-title>
     <v-list class="overflow-y-auto" max-height="400">
 
       <v-list-item v-for="(item, i) in items" :key="i">
@@ -7,22 +8,25 @@
         <v-alert
             v-if="item.content.type === 'CREATE'"
             border="left" color="green lighten-2" dark>
-          {{ item }}
+          在 {{ item.date }}:<br />
+          用户 {{ item.userId }} 创建了 {{ item.content.after.id }}
         </v-alert>
         <v-alert
             v-else-if="item.content.type === 'UPDATE'"
             border="left" color="blue lighten-2" dark>
-          {{ item }}
+          在 {{ item.date }}:<br />
+          用户 {{ item.userId }} 修改了 {{ item.content.before.id }}
         </v-alert>
         <v-alert
             v-else-if="item.content.type === 'REMOVE'"
             border="left" color="red lighten-2" dark>
-          {{ item }}
+          在 {{ item.date }}:<br />
+          用户 {{ item.userId }} 删除了 {{ item.content.before.id }}
         </v-alert>
 
       </v-list-item>
 
-      <v-skeleton-loader v-if="hasNext" v-intersect="loadNextPage" type="list-item@1" />
+      <v-skeleton-loader v-if="hasNext" v-intersect="loadNextPage" type="list-item@5" />
     </v-list>
   </v-container>
 </template>
@@ -41,6 +45,7 @@ export default {
     },
     total: {
       type: Number,
+      default: Number.MAX_VALUE,
       required: true,
     },
   },
