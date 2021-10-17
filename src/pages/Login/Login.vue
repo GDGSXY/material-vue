@@ -81,6 +81,7 @@
 <script>
 import {postRequest} from '@/utils/request'
 import system from '@/api/System'
+import config from "@/config";
 
 export default {
   name: 'Login',
@@ -104,6 +105,7 @@ export default {
         password: this.password
       }).then(response => {
         if (response.code === 0) {
+          this.$toast.success('登录成功！', config.options)
           localStorage.setItem('token', response.data.token)
           let info = {
             userId: response.data.id,
@@ -113,7 +115,7 @@ export default {
           localStorage.setItem('info', JSON.stringify(info))
           this.$router.push('/dashboard');
         } else {
-          alert(response.msg)
+          this.$toast.error(response.msg, config.options)
         }
       })
     }
