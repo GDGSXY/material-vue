@@ -23,6 +23,7 @@
           </v-data-table>
           <div class="text-center pt-2">
             <v-pagination
+                circle
                 @input="updatePage"
                 v-model="page"
                 :length="pageCount"
@@ -37,6 +38,7 @@
 <script>
 import {getRequest} from "@/utils/request";
 import roleApi from '@/api/Role'
+import config from "@/config";
 
 export default {
   name: "Role",
@@ -65,20 +67,11 @@ export default {
         search: this.search
       }).then(response => {
         if (response.code === 0) {
+          this.$toast.success('查询成功', config.options)
           this.tableData = response.data.records
-          this.pageCount = response.data.total / this.itemsPerPage + 1
+          this.pageCount = response.data.pages
         } else {
-          this.$toast.error(response.msg, {
-            position: this.position,
-            timeout: 3000,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: "button",
-            icon: true
-          });
+          this.$toast.error(response.msg, config.options);
         }
       })
     },
