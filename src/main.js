@@ -6,7 +6,6 @@ import vuetify from './plugins/vuetify'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import Message from '@/utils/Message'
 
 Vue.use(Toast)
 
@@ -17,7 +16,6 @@ Vue.use(VueGoogleMaps, {
 })
 
 Vue.config.productionTip = false
-Vue.prototype.$message = Message
 
 new Vue({
   vuetify,
