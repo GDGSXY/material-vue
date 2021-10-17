@@ -5,7 +5,6 @@ import Layout from '@/components/Layout/Layout';
 
 // Pages
 import Dashboard from '@/pages/Dashboard/Dashboard';
-import Icons from '@/pages/Icons/Icons'
 import Charts from '@/pages/Charts/Charts'
 import Maps from '@/pages/Maps/Google'
 import Error from "@/pages/Error/Error";
@@ -66,11 +65,6 @@ export default new Router({
         path: 'clazz',
         name: 'Clazz',
         component: Clazz
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: Icons
       },
       {
         path: 'charts',
