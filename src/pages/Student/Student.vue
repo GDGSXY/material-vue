@@ -162,7 +162,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-dialog v-model="dialogDelete" max-width="600px">
             <v-card>
               <v-card-title class="text-h5">该学生下可能有绑定的数据，确定要删除该学生吗?</v-card-title>
               <v-card-actions>
@@ -186,6 +186,7 @@
     </v-data-table>
     <div class="text-center pt-2">
       <v-pagination
+          circle
           @input="updatePage"
           v-model="page"
           :length="pageCount"
@@ -194,6 +195,7 @@
     <OperationLog
         :items="operationLogList"
         :current="operationLogListCurrent"
+        :size="operationLogListSize"
         :total="operationLogListTotal"
         @load-next-page="loadNextOperationLog"
     />
@@ -208,6 +210,7 @@ import majorApi from '@/api/MajorInfo'
 import classApi from '@/api/ClassInfo'
 import operationLogApi from '@/api/OperationLog'
 import OperationLog from '@/components/OperationLog/OperationLog'
+import config from "@/config";
 
 export default {
   name: 'Student',
@@ -322,20 +325,12 @@ export default {
         classId: this.classId,
       }).then(response => {
         if (response.code === 0) {
+          this.getOperationLogData(1, 1)
           this.tableData = response.data.records
           this.pageCount = Number(response.data.pages)
+          this.$toast.success("查询成功", config.options)
         } else {
-          this.$toast.error(response.msg, {
-            position: this.position,
-            timeout: 3000,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: 'button',
-            icon: true,
-          })
+          this.$toast.error(response.msg, config.options)
         }
       })
     },
@@ -344,17 +339,7 @@ export default {
         if (response.code === 0) {
           this.academyOptions = response.data
         } else {
-          this.$toast.error(response.msg, {
-            position: this.position,
-            timeout: 3000,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: 'button',
-            icon: true,
-          })
+          this.$toast.error(response.msg, config.options)
         }
       })
     },
@@ -364,17 +349,7 @@ export default {
         if (response.code === 0) {
           this.majorOptions = response.data
         } else {
-          this.$toast.error(response.msg, {
-            position: this.position,
-            timeout: 3000,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: 'button',
-            icon: true,
-          })
+          this.$toast.error(response.msg, config.options)
         }
       })
     },
@@ -384,17 +359,7 @@ export default {
         if (response.code === 0) {
           this.classOptions = response.data
         } else {
-          this.$toast.error(response.msg, {
-            position: this.position,
-            timeout: 3000,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: 'button',
-            icon: true,
-          })
+          this.$toast.error(response.msg, config.options)
         }
       })
     },
@@ -423,17 +388,7 @@ export default {
               this.closeDelete()
               this.getStudentData()
             } else {
-              this.$toast.error(response.msg, {
-                position: this.position,
-                timeout: 3000,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: false,
-                showCloseButtonOnHover: false,
-                hideProgressBar: true,
-                closeButton: 'button',
-                icon: true,
-              })
+              this.$toast.error(response.msg, config.options)
             }
           })
     },
@@ -473,18 +428,9 @@ export default {
           if (response.code === 0) {
             this.close()
             this.getStudentData()
+            this.getOperationLogData(1, this.operationLogListPageSize)
           } else {
-            this.$toast.error(response.msg, {
-              position: this.position,
-              timeout: 3000,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: false,
-              showCloseButtonOnHover: false,
-              hideProgressBar: true,
-              closeButton: 'button',
-              icon: true,
-            })
+            this.$toast.error(response.msg, config.options)
           }
         })
       } else {
@@ -509,18 +455,9 @@ export default {
           if (response.code === 0) {
             this.close()
             this.getStudentData()
+            this.getOperationLogData(1, this.operationLogListPageSize)
           } else {
-            this.$toast.error(response.msg, {
-              position: this.position,
-              timeout: 3000,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: false,
-              showCloseButtonOnHover: false,
-              hideProgressBar: true,
-              closeButton: 'button',
-              icon: true,
-            })
+            this.$toast.error(response.msg,config.options)
           }
         })
       }
@@ -537,7 +474,7 @@ export default {
           this.operationLogListCurrent = Number(res.data.current)
           this.operationLogListSize = Number(res.data.size)
         } else {
-          this.$message.error(res.msg)
+          this.$toast.error(res.msg, config.options)
         }
       })
     },
