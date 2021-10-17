@@ -16,6 +16,7 @@
             border="left" color="blue lighten-2" dark>
           在 {{ item.date }}:<br />
           用户 {{ item.userId }} 修改了 {{ item.content.before.id }}
+          <v-btn @click="() => openUpdateDetail(item)">查看明细</v-btn>
         </v-alert>
         <v-alert
             v-else-if="item.content.type === 'REMOVE'"
@@ -57,6 +58,9 @@ export default {
   methods: {
     loadNextPage () {
       this.$emit('load-next-page', { current: this.current })
+    },
+    openUpdateDetail (item) {
+      alert(`修改前：\n${JSON.stringify(item.content.before)}\n修改后：\n${JSON.stringify(item.content.after)}`)
     },
   },
 }
