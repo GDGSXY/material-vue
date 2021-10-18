@@ -27,17 +27,6 @@
               v-model="dialog"
               max-width="500px"
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-              >
-                添加用户
-              </v-btn>
-            </template>
             <v-card>
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
@@ -72,25 +61,11 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="600px">
-            <v-card>
-              <v-card-title class="text-h5">该用户下可能有绑定的数据，确定要删除该用户吗?</v-card-title>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete">返回</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm">确定</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)">
           mdi-pencil
-        </v-icon>
-        <v-icon small @click="deleteItem(item)">
-          mdi-delete
         </v-icon>
       </template>
     </v-data-table>
@@ -190,7 +165,6 @@ export default {
       this.getUserData()
     },
     editItem (item) {
-      console.log(item)
       this.editedIndex = this.tableData.indexOf(item)
       if (this.editedIndex !== -1) {
         getRequest(roleApi.getRole, {
@@ -209,14 +183,6 @@ export default {
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
-    deleteItem (item) {
-      this.userId = item.id
-      this.dialogDelete = true
-    },
-    deleteItemConfirm () {
-      this.$toast.success('删除成功', config.options)
-      this.getUserData()
-    },
 
     close () {
       this.editedItem = []
@@ -234,23 +200,18 @@ export default {
     },
 
     save () {
-      if (this.editedIndex === -1) {
-        this.$toast.success('添加成功', config.options)
-        this.getUserData()
-      } else {
-        postRequest(userApi.userOperate1 + `/${this.userId}?roleId=${this.editedItem.roleId}`, {
-          id: this.userId,
-          username: this.editedItem.username,
-          roleId: this.roleId
-        }).then(response => {
-          if (response.code === 0) {
-            this.$toast.success('修改成功', config.options)
-            this.close()
-            this.getUserData()
-            this.getOperationLogData(1, this.operationLogListPageSize)
-          }
-        })
-      }
+      postRequest(userApi.userOperate1 + `/${this.userId}?roleId=${this.editedItem.roleId}`, {
+        id: this.userId,
+        username: this.editedItem.username,
+        roleId: this.roleId
+      }).then(response => {
+        if (response.code === 0) {
+          this.$toast.success('修改成功', config.options)
+          this.close()
+          this.getUserData()
+          this.getOperationLogData(1, this.operationLogListPageSize)
+        }
+      })
     },
 
     appendOperationLogData (current, pageSize) {
