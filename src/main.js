@@ -17,6 +17,19 @@ Vue.use(VueGoogleMaps, {
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+  const isToken = window.localStorage.getItem('token')
+  if (to.path === '/login') {
+    next()
+  }
+  if (isToken) {
+    next()
+  } else {
+    next('/login')
+  }
+  next()
+})
+
 new Vue({
   vuetify,
   router,
