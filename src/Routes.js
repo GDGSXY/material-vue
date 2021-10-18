@@ -15,6 +15,7 @@ import Teacher from "@/pages/Teacher/Teacher";
 import Academy from "@/pages/Academy/Academy";
 import Major from "@/pages/Major/Major";
 import Clazz from "@/pages/Clazz/Clazz";
+import User from "@/pages/user/User";
 
 Vue.use(Router);
 
@@ -65,6 +66,11 @@ export default new Router({
         path: 'clazz',
         name: 'Clazz',
         component: Clazz
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: User
       },
       {
         path: 'charts',
