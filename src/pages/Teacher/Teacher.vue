@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <v-data-table
+        :loading="loading"
+        loading-text="加载数据中......"
         :headers="headers"
         :items="tableData"
         :page.sync="page"
@@ -57,8 +59,8 @@
                                 item-text="name"
                                 item-value="id"
                                 label="请选择学院"
-                                @click="getItems"
-                                @change="getValue"></v-select>
+                                @click="getItems1"
+                                @change="v => editedItem.academyId = v"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.name" label="教师姓名"></v-text-field>
@@ -147,6 +149,7 @@ export default {
   components: { OperationLog },
   data () {
     return {
+      loading: true,
       dialog: false,
       dialogDelete: false,
       academyOptions: [],
@@ -172,7 +175,8 @@ export default {
         name: '',
         gender: '',
         politicalOutlook: '',
-        teacherCode: ''
+        teacherCode: '',
+        academyId: null
       },
       gender: [{ value: 'MALE', name: '男' }, { value: 'FEMALE', name: '女' }],
       politicalOutlook: [
@@ -217,12 +221,16 @@ export default {
         if (response.code === 0) {
           this.tableData = response.data.records
           this.pageCount = response.data.pages
+          this.$toast.success('查询成功', config.options)
+          this.loading = false
         } else {
           this.$toast.error(response.msg, config.options);
+          this.loading = false
         }
       })
     },
     getItems () {
+      this.academyOptions = []
       getRequest(academyApi.getAcademyByPermission).then(response => {
         if (response.code === 0) {
           this.academyOptions = response.data
@@ -234,6 +242,16 @@ export default {
     getValue (value) {
       this.academyId = value
       this.getTeacherData()
+    },
+    getItems1 () {
+      this.academyOptions = []
+      getRequest(academyApi.getAcademyByPermission).then(response => {
+        if (response.code === 0) {
+          this.academyOptions = response.data
+        } else {
+          this.$toast.error(response.msg, config.options);
+        }
+      })
     },
     editItem (item) {
       this.editedIndex = this.tableData.indexOf(item)
@@ -249,6 +267,7 @@ export default {
       deleteRequest(teacherApi.queryTeacher + `/${this.teacherId}`)
           .then(response => {
             if (response.code === 0) {
+              this.$toast.success('删除成功', config.options)
               this.closeDelete()
               this.getTeacherData()
               this.getOperationLogData(1, this.operationLogListPageSize)
@@ -259,6 +278,7 @@ export default {
     },
 
     close () {
+      this.editedItem = []
       this.dialog = false
       this.$nextTick(() => {
         this.editedIndex = -1
@@ -274,13 +294,14 @@ export default {
     save () {
       if (this.editedIndex === -1) {
         postRequest(teacherApi.queryTeacher, {
-          academyId: this.academyId,
+          academyId: this.editedItem.academyId,
           name: this.editedItem.name,
           gender: this.editedItem.gender,
           politicalOutlook: this.editedItem.politicalOutlook,
           teacherCode: this.editedItem.teacherCode
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('添加成功', config.options)
             this.close()
             this.getTeacherData()
             this.getOperationLogData(1, this.operationLogListPageSize)
@@ -295,9 +316,10 @@ export default {
           gender: this.editedItem.gender,
           politicalOutlook: this.editedItem.politicalOutlook,
           teacherCode: this.editedItem.teacherCode,
-          academyId: this.academyId
+          academyId: this.editedItem.academyId
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('修改成功', config.options)
             this.close()
             this.getTeacherData()
             this.getOperationLogData(1, this.operationLogListPageSize)

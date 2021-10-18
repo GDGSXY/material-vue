@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <v-data-table
+        :loading="loading"
+        loading-text="加载数据中......"
         :headers="headers"
         :items="tableData"
         :page.sync="page"
@@ -73,8 +75,8 @@
                                 item-text="name"
                                 item-value="id"
                                 label="请选择学院"
-                                @click="getItems"
-                                @change="getValue"></v-select>
+                                @click="getItems1"
+                                @change="getValue3"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-select :disabled="majorDisabled"
@@ -82,7 +84,7 @@
                                 item-text="name"
                                 item-value="id"
                                 label="请选择专业"
-                                @change="getValue1"></v-select>
+                                @change="getValue4"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-select :disabled="classDisabled"
@@ -216,6 +218,7 @@ export default {
   components: { OperationLog },
   data () {
     return {
+      loading: true,
       dialog: false,
       dialogDelete: false,
       majorDisabled: true,
@@ -328,12 +331,15 @@ export default {
           this.tableData = response.data.records
           this.pageCount = Number(response.data.pages)
           this.$toast.success('查询成功', config.options)
+          this.loading = false
         } else {
           this.$toast.error(response.msg, config.options)
+          this.loading = false
         }
       })
     },
     getItems () {
+      this.academyOptions = []
       getRequest(academyApi.getAcademyByPermission).then(response => {
         if (response.code === 0) {
           this.academyOptions = response.data
@@ -344,6 +350,7 @@ export default {
     },
     getValue (value) {
       this.majorDisabled = false
+      this.majorOptions = []
       getRequest(majorApi.getMajorByPermission + `?academyId=${value}`).then(response => {
         if (response.code === 0) {
           this.majorOptions = response.data
@@ -354,6 +361,7 @@ export default {
     },
     getValue1 (value) {
       this.classDisabled = false
+      this.classOptions = []
       getRequest(classApi.getClassByPermission + `?majorId=${value}`).then(response => {
         if (response.code === 0) {
           this.classOptions = response.data
@@ -362,6 +370,40 @@ export default {
         }
       })
     },
+
+    getItems1 () {
+      this.academyOptions = []
+      getRequest(academyApi.getAcademyByPermission).then(response => {
+        if (response.code === 0) {
+          this.academyOptions = response.data
+        } else {
+          this.$toast.error(response.msg, config.options)
+        }
+      })
+    },
+    getValue3 (value) {
+      this.majorDisabled = false
+      this.majorOptions = []
+      getRequest(majorApi.getMajorByPermission + `?academyId=${value}`).then(response => {
+        if (response.code === 0) {
+          this.majorOptions = response.data
+        } else {
+          this.$toast.error(response.msg, config.options)
+        }
+      })
+    },
+    getValue4 (value) {
+      this.classDisabled = false
+      this.classOptions = []
+      getRequest(classApi.getClassByPermission + `?majorId=${value}`).then(response => {
+        if (response.code === 0) {
+          this.classOptions = response.data
+        } else {
+          this.$toast.error(response.msg, config.options)
+        }
+      })
+    },
+
     editItem (item) {
       this.editedIndex = this.tableData.indexOf(item)
       this.studentId = item.id
@@ -384,6 +426,7 @@ export default {
       deleteRequest(studentApi.getStudentTable + `/${this.studentId}`)
           .then(response => {
             if (response.code === 0) {
+              this.$toast.success('删除成功', config.options)
               this.closeDelete()
               this.getStudentData()
               this.getOperationLogData(1, this.operationLogListPageSize)
@@ -394,6 +437,7 @@ export default {
     },
 
     close () {
+      this.editedItem = []
       this.dialog = false
       this.$nextTick(() => {
         this.editedIndex = -1
@@ -426,6 +470,7 @@ export default {
           concatPhone: this.editedItem.concatPhone,
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('添加成功', config.options)
             this.close()
             this.getStudentData()
             this.getOperationLogData(1, this.operationLogListPageSize)
@@ -453,6 +498,7 @@ export default {
           concatPhone: this.editedItem.concatPhone,
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('修改成功', config.options)
             this.close()
             this.getStudentData()
             this.getOperationLogData(1, this.operationLogListPageSize)

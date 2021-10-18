@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <v-data-table
+        :loading="loading"
+        loading-text="加载数据中......"
         :headers="headers"
         :items="tableData"
         :page.sync="page"
@@ -113,6 +115,7 @@ export default {
   components: { OperationLog },
   data () {
     return {
+      loading: true,
       dialog: false,
       dialogDelete: false,
       page: 1,
@@ -164,9 +167,11 @@ export default {
         if (response.code === 0) {
           this.tableData = response.data.records
           this.pageCount = response.data.pages
+          this.loading = false
           this.$toast.success("查询成功", config.options)
         } else {
           this.$toast.error(response.msg, config.options)
+          this.loading = false
         }
       })
     },
@@ -184,6 +189,7 @@ export default {
       deleteRequest(academyApi.getAcademy + `/${this.academyId}`)
           .then(response => {
             if (response.code === 0) {
+              this.$toast.success('删除成功', config.options)
               this.closeDelete()
               this.getAcademyData()
               this.getOperationLogData(1, this.operationLogListPageSize)
@@ -195,6 +201,7 @@ export default {
 
     close () {
       this.dialog = false
+      this.editedItem = []
       this.$nextTick(() => {
         this.editedIndex = -1
       })
@@ -213,6 +220,7 @@ export default {
           name: this.editedItem.name
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('添加成功', config.options)
             this.close()
             this.getAcademyData()
             this.getOperationLogData(1, this.operationLogListPageSize)
@@ -226,6 +234,7 @@ export default {
           name: this.editedItem.name
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('修改成功', config.options)
             this.close()
             this.getAcademyData()
             this.getOperationLogData(1, this.operationLogListPageSize)

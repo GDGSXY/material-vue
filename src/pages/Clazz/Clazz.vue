@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <v-data-table
+        :loading="loading"
+        loading-text="加载数据中......"
         :headers="headers"
         :items="tableData"
         :page.sync="page"
@@ -65,8 +67,8 @@
                                 item-text="name"
                                 item-value="id"
                                 label="请选择学院"
-                                @click="getItems"
-                                @change="getValue"></v-select>
+                                @click="getItems1"
+                                @change="getValue2"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-select :disabled="majorDisabled"
@@ -74,7 +76,7 @@
                                 item-text="name"
                                 item-value="id"
                                 label="请选择专业"
-                                @change="getValue1"></v-select>
+                                @change="v => editedItem.majorId = v"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-select :items="counselorOptions"
@@ -164,6 +166,7 @@ export default {
   components: { OperationLog },
   data () {
     return {
+      loading: true,
       dialog: false,
       dialogDelete: false,
       majorDisabled: true,
@@ -193,7 +196,8 @@ export default {
         counselorId: null,
         headTeacherId: null,
         name: '',
-        teacherCode: ''
+        teacherCode: '',
+        majorId: null
       },
       // 操作日志
       operationLogListPageSize: 5,
@@ -230,12 +234,16 @@ export default {
         if (response.code === 0) {
           this.tableData = response.data.records
           this.pageCount = Number(response.data.pages)
+          this.loading = false
+          this.$toast.success('查询成功', config.options)
         } else {
           this.$toast.error(response.msg, config.options)
+          this.loading = false
         }
       })
     },
     getItems () {
+      this.academyOptions = []
       getRequest(academyApi.getAcademyByPermission).then(response => {
         if (response.code === 0) {
           this.academyOptions = response.data
@@ -247,6 +255,7 @@ export default {
     getValue (value) {
       this.majorDisabled = false
       this.academyId = value
+      this.majorOptions = []
       getRequest(majorApi.getMajorByPermission + `?academyId=${value}`)
       .then(response => {
         if (response.code === 0) {
@@ -256,9 +265,34 @@ export default {
         }
       })
     },
+
     getValue1 (value) {
       this.majorId = value
       this.getClassData()
+    },
+
+    getItems1 () {
+      this.academyOptions = []
+      getRequest(academyApi.getAcademyByPermission).then(response => {
+        if (response.code === 0) {
+          this.academyOptions = response.data
+        } else {
+          this.$toast.error(response.msg, config.options);
+        }
+      })
+    },
+    getValue2 (value) {
+      this.majorDisabled = false
+      this.academyId = value
+      this.majorOptions = []
+      getRequest(majorApi.getMajorByPermission + `?academyId=${value}`)
+          .then(response => {
+            if (response.code === 0) {
+              this.majorOptions = response.data
+            } else {
+              this.$toast.error(response.msg, config.options);
+            }
+          })
     },
 
     getCounselor () {
@@ -269,7 +303,6 @@ export default {
             let { userId, name } = item
             this.counselorOptions.push({ userId, name })
           })
-          console.log(this.counselorOptions);
         } else {
           this.$toast.error(response.msg, config.options)
         }
@@ -318,6 +351,7 @@ export default {
     },
 
     close () {
+      this.editedItem = []
       this.dialog = false
       this.$nextTick(() => {
         this.editedIndex = -1
@@ -336,9 +370,10 @@ export default {
           name: this.editedItem.name,
           counselorId: this.editedItem.counselorId,
           headTeacherId: this.editedItem.headTeacherId,
-          majorId: this.majorId
+          majorId: this.editedItem.majorId
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('添加成功', config.options)
             this.close()
             this.getClassData()
             this.getOperationLogData(1, this.operationLogListPageSize)
@@ -352,9 +387,10 @@ export default {
           name: this.editedItem.name,
           counselorId: this.editedItem.counselorId,
           headTeacherId: this.editedItem.headTeacherId,
-          majorId: this.majorId
+          majorId: this.editedItem.majorId
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('修改成功', config.options)
             this.close()
             this.getClassData()
             this.getOperationLogData(1, this.operationLogListPageSize)

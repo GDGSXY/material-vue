@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <v-data-table
+        :loading="loading"
+        loading-text="加载数据中......"
         :headers="headers"
         :items="tableData"
         :page.sync="page"
@@ -19,14 +21,14 @@
                           @click="getItems"
                           @change="getValue"></v-select>
               </v-col>
+              <v-col md="2">
+                <v-text-field label="请输入专业名称"
+                              v-model="search"
+                              append-outer-icon="fa-search"
+                              @click:append-outer="getMajorData">
+                </v-text-field>
+              </v-col>
             </v-row>
-            <v-col md="2">
-              <v-text-field label="请输入专业名称"
-                            v-model="search"
-                            append-outer-icon="fa-search"
-                            @click:append-outer="getMajorData">
-              </v-text-field>
-            </v-col>
           </v-container>
           <v-spacer></v-spacer>
           <v-dialog
@@ -57,10 +59,10 @@
                                 item-text="name"
                                 item-value="id"
                                 label="请选择学院"
-                                @click="getItems"
-                                @change="getValue"></v-select>
+                                @click="getItems1"
+                                @change="getValue1"></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6" md="8">
+                    <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.name" label="专业名称"></v-text-field>
                     </v-col>
                   </v-row>
@@ -130,6 +132,7 @@ export default {
   components: { OperationLog },
   data () {
     return {
+      loading: true,
       dialog: false,
       dialogDelete: false,
       academyOptions: [],
@@ -160,7 +163,7 @@ export default {
   },
   computed: {
     formTitle () {
-      return this.editedIndex === -1 ? '添加学生信息' : '编辑学生信息'
+      return this.editedIndex === -1 ? '添加专业信息' : '编辑专业信息'
     },
   },
   watch: {
@@ -186,12 +189,16 @@ export default {
         if (response.code === 0) {
           this.tableData = response.data.records
           this.pageCount = Number(response.data.pages)
+          this.$toast.success('查询成功', config.options)
+          this.loading = false
         } else {
           this.$toast.error(response.msg, config.options);
+          this.loading = false
         }
       })
     },
     getItems () {
+      this.academyOptions = []
       getRequest(academyApi.getAcademyByPermission).then(response => {
         if (response.code === 0) {
           this.academyOptions = response.data
@@ -203,6 +210,19 @@ export default {
     getValue (value) {
       this.academyId = value
       this.getMajorData()
+    },
+    getItems1 () {
+      this.academyOptions = []
+      getRequest(academyApi.getAcademyByPermission).then(response => {
+        if (response.code === 0) {
+          this.academyOptions = response.data
+        } else {
+          this.$toast.error(response.msg, config.options);
+        }
+      })
+    },
+    getValue1 (value) {
+      this.academyId = value
     },
     editItem (item) {
       this.editedIndex = this.tableData.indexOf(item)
@@ -218,6 +238,7 @@ export default {
       deleteRequest(majorApi.getMajor + `/${this.majorId}`)
           .then(response => {
             if (response.code === 0) {
+              this.$toast.success('删除成功', config.options)
               this.closeDelete()
               this.getMajorData()
               this.getOperationLogData(1, this.operationLogListPageSize)
@@ -228,6 +249,7 @@ export default {
     },
 
     close () {
+      this.editedItem = []
       this.dialog = false
       this.$nextTick(() => {
         this.editedIndex = -1
@@ -247,6 +269,7 @@ export default {
           name: this.editedItem.name
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('添加成功', config.options)
             this.close()
             this.getMajorData()
             this.getOperationLogData(1, this.operationLogListPageSize)
@@ -261,6 +284,7 @@ export default {
           name: this.editedItem.name
         }).then(response => {
           if (response.code === 0) {
+            this.$toast.success('修改成功', config.options)
             this.close()
             this.getMajorData()
             this.getOperationLogData(1, this.operationLogListPageSize)
